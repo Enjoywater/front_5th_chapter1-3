@@ -28,6 +28,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         message,
         type,
       };
+
       setNotifications((prev) => [...prev, newNotification]);
     },
     [],

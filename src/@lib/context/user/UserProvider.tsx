@@ -14,6 +14,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({
   initialUser = null,
 }) => {
   const [user, setUser] = useState<User | null>(initialUser);
+
   const { addNotification } = useNotification();
 
   const login = useCallback(

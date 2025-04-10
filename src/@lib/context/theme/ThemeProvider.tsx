@@ -4,14 +4,14 @@ import { useCallback, useMemo } from "../../hooks";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
-  initialTheme?: string;
+  initialTheme?: "light" | "dark";
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
   initialTheme = "light",
 }) => {
-  const [theme, setTheme] = useState<string>(initialTheme);
+  const [theme, setTheme] = useState<"light" | "dark">(initialTheme);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));

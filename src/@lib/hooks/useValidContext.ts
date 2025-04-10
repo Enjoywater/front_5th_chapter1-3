@@ -6,5 +6,6 @@ export const useValidContext = <T>(context: React.Context<T>) => {
   if (contextValue === undefined) {
     throw new Error("context must be used within a provider");
   }
+
   return contextValue;
 };

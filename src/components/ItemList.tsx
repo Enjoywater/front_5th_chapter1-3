@@ -4,6 +4,9 @@ import { useTheme } from "../@lib/context";
 import { Item } from "../types/common";
 import { renderLog } from "../utils";
 
+const generateLocaleString = (value: number, unit: string) =>
+  value.toLocaleString() + unit;
+
 const ItemList: React.FC<{
   items: Item[];
   onAddItemsClick: () => void;
@@ -38,6 +41,7 @@ const ItemList: React.FC<{
     <div className="mt-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">상품 목록</h2>
+
         <div>
           <button
             type="button"
@@ -48,6 +52,7 @@ const ItemList: React.FC<{
           </button>
         </div>
       </div>
+
       <input
         type="text"
         placeholder="상품 검색..."
@@ -55,18 +60,21 @@ const ItemList: React.FC<{
         onChange={(e) => setFilter(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded text-black"
       />
+
       <ul className="mb-4 mx-4 flex gap-3 text-sm justify-end">
-        <li>검색결과: {filteredItems.length.toLocaleString()}개</li>
-        <li>전체가격: {totalPrice.toLocaleString()}원</li>
-        <li>평균가격: {averagePrice.toLocaleString()}원</li>
+        <li>검색결과: {generateLocaleString(filteredItems.length, "개")}</li>
+        <li>전체가격: {generateLocaleString(totalPrice, "원")}</li>
+        <li>평균가격: {generateLocaleString(averagePrice, "원")}</li>
       </ul>
+
       <ul className="space-y-2">
         {filteredItems.map((item, index) => (
           <li
             key={index}
             className={`p-2 rounded shadow ${theme === "light" ? "bg-white text-black" : "bg-gray-700 text-white"}`}
           >
-            {item.name} - {item.category} - {item.price.toLocaleString()}원
+            {item.name} - {item.category} -{" "}
+            {generateLocaleString(item.price, "원")}
           </li>
         ))}
       </ul>
