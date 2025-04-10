@@ -1,17 +1,16 @@
-import { memo } from "../@lib";
-import { useThemeContext, useUserContext } from "../@lib/context";
+import { memo, useCallback } from "../@lib";
+import { useTheme, useUser } from "../@lib/context";
 import { renderLog } from "../utils";
 
 const Header: React.FC = memo(() => {
   renderLog("Header rendered");
 
-  const { theme, toggleTheme } = useThemeContext();
-  const { user, login, logout } = useUserContext();
+  const { theme, toggleTheme } = useTheme();
+  const { user, login, logout } = useUser();
 
-  const handleLogin = () => {
-    // 실제 애플리케이션에서는 사용자 입력을 받아야 합니다.
+  const handleLogin = useCallback(() => {
     login("user@example.com", "password");
-  };
+  }, [login]);
 
   return (
     <header className="bg-gray-800 text-white p-4">
@@ -24,6 +23,7 @@ const Header: React.FC = memo(() => {
           >
             {theme === "light" ? "다크 모드" : "라이트 모드"}
           </button>
+
           {user ? (
             <div className="flex items-center">
               <span className="mr-2">{user.name}님 환영합니다!</span>

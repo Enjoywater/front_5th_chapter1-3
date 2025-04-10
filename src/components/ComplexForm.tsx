@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { memo } from "../@lib";
+import { memo, useCallback } from "../@lib";
 import { renderLog } from "../utils";
-import { useNotificationContext } from "../@lib/context";
+import { useNotification } from "../@lib/context";
 
 const ComplexForm: React.FC = memo(() => {
   renderLog("ComplexForm rendered");
 
-  const { addNotification } = useNotificationContext();
+  const { addNotification } = useNotification();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -15,27 +15,42 @@ const ComplexForm: React.FC = memo(() => {
     preferences: [] as string[],
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    addNotification("폼이 성공적으로 제출되었습니다", "success");
-  };
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "age" ? parseInt(value) || 0 : value,
-    }));
-  };
+      addNotification("폼이 성공적으로 제출되었습니다", "success");
+    },
+    [addNotification],
+  );
 
-  const handlePreferenceChange = (preference: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      preferences: prev.preferences.includes(preference)
-        ? prev.preferences.filter((p) => p !== preference)
-        : [...prev.preferences, preference],
-    }));
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: name === "age" ? parseInt(value) || 0 : value,
+      }));
+    },
+    [],
+  );
+
+  const handlePreferenceChange = useCallback((preference: string) => {
+    setFormData((prev) => {
+      const isIncludedPreference = prev.preferences.includes(preference);
+      const filteredPreferences = prev.preferences.filter(
+        (p) => p !== preference,
+      );
+
+      return {
+        ...prev,
+        preferences: isIncludedPreference
+          ? filteredPreferences
+          : [...prev.preferences, preference],
+      };
+    });
+  }, []);
 
   return (
     <div className="mt-8">
